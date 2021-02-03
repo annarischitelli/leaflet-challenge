@@ -11,26 +11,26 @@ d3.json(queryUrl).then(function(data) {
   var earthquakes = L.geoJSON(data.features);
 
   // The rest of this is all the same
-  var satellitemap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11.html?title=true&access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NDg1bDA1cjYzM280NHJ5NzlvNDMifQ.d6e-nNyBDtmQCVwVNivz7A#1.55/11.1/1.4", {
+  var satellitemap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
     tileSize: 512,
     maxZoom: 18,
     zoomOffset: -1,
-    id: "mapbox/streets-v11",
+    id: "mapbox/satellite-v9",
     accessToken: API_KEY
   });
 
   var graymap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
     maxZoom: 18,
-    id: "dark-v10",
+    id: "mapbox/light-v10",
     accessToken: API_KEY
   });
 
   var outdoorsmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
     maxZoom: 18,
-    id: "dark-v10",
+    id: "mapbox/outdoors-v11",
     accessToken: API_KEY
   });
 
@@ -47,12 +47,12 @@ d3.json(queryUrl).then(function(data) {
   };
 
   // Create our map, giving it the streetmap and earthquakes layers to display on load
-  var myMap = L.map("mapid", {
+  var myMap = L.map("map", {
     center: [
       37.09, -95.71
     ],
     zoom: 5,
-    layers: [satellitemap, earthquakes]
+    // layers: [satellitemap, earthquakes]
   });
 
   // Create a layer control
