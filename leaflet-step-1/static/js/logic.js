@@ -3,8 +3,8 @@ var queryUrl = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&
 
 // Perform a GET request to the query URL
 d3.json(queryUrl).then(function(data) {
-  // The data.features object is in the GeoJSON standard
-  console.log(data.features);
+//   // The data.features object is in the GeoJSON standard
+//   console.log(data.features);
 
   // This is it! Leaflet knows what to do with 
   // each type of feature (held in the `geometry` key) and draws the correct markers.
@@ -18,21 +18,25 @@ d3.json(queryUrl).then(function(data) {
     zoomOffset: -1,
     id: "mapbox/streets-v11",
     accessToken: API_KEY
-  });
+});
 
-  var darkmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
-    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+  var darkmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+    tileSize: 512,
     maxZoom: 18,
-    id: "dark-v10",
+    zoomOffset: -1,
+    id: "mapbox/streets-v11",
     accessToken: API_KEY
-  });
+});
 
-  var outdoorsmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
-    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+  var outdoorsmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+    tileSize: 512,
     maxZoom: 18,
-    id: "dark-v10",
+    zoomOffset: -1,
+    id: "mapbox/streets-v11",
     accessToken: API_KEY
-  });
+});
 
   // Define a baseMaps object to hold our base layers
   var baseMaps = {
@@ -50,14 +54,13 @@ d3.json(queryUrl).then(function(data) {
   var myMap = L.map("mapid", {
     center: [37.09, -95.71],
     zoom: 5,
-    layers: [streetmap, earthquakes]
+    layers: [streetmap, darkmap, outdoorsmap, earthquakes]
   });
 
   // Create a layer control
   // Pass in our baseMaps and overlayMaps
   // Add the layer control to the map
   L.control.layers(baseMaps, overlayMaps, {collapsed: false}).addTo(myMap);
-});
 
 // https://leafletjs.com/examples/geojson/
 // L.geoJSON() also gives us handy options, almost like a built in `.forEach()`
@@ -68,12 +71,12 @@ function onEachFeatureFunc(feature, layer) {
 }
 
 var geojsonMarkerOptions = {
-  radius: 8,
-  fillColor: "#ff7800",
-  color: "#000",
-  weight: 1,
-  opacity: 1,
-  fillOpacity: 0.8
+    radius: radius(feature.properties.mag),
+    fillColor: color(feature.properties.mag),
+    color: "#red",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 1
 };
 
 function pointToLayerFunc(feature, latlng) {
@@ -86,5 +89,5 @@ function pointToLayerFunc(feature, latlng) {
   var earthquakes = L.geoJSON(data.features, {
     onEachFeature: onEachFeatureFunc,
     pointToLayer: pointToLayerFunc
-  })
-  earthquakes.addTo(myMap);
+  }).addTo(myMap);
+});
