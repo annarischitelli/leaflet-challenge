@@ -62,7 +62,41 @@ d3.json(queryUrl).then(function(data) {
   // Add the layer control to the map
   L.control.layers(baseMaps, overlayMaps, {collapsed: false}).addTo(myMap);
 
-// https://leafletjs.com/examples/geojson/
+// Loop through the cities array and create one marker for each city object
+L.geoJSON(data.features).forEach(function(mag) {
+
+    // Conditionals for countries points
+    var color = "";
+    if (feature.properties.mag > 5) {
+      color = "red";
+    }
+    else if (feature.properties.mag > 4) {
+      color = "orange";
+    }
+    else if (feature.properties.mag > 3) {
+      color = "yellow";
+    }
+    else if (feature.properties.mag > 2) {
+        color = "green";
+    }
+    else if (feature.properties.mag > 1) {
+        color = "blue";
+     }
+    else {
+      color = "red";
+    }
+  
+    // Add circles to map
+    L.circle(country.location, {
+      fillOpacity: 0.75,
+      color: "white",
+      fillColor: color,
+      // Adjust radius
+      radius: country.points * 1500
+    }).bindPopup("<h1>" + country.name + "</h1> <hr> <h3>Points: " + country.points + "</h3>").addTo(myMap);
+  });
+
+  // https://leafletjs.com/examples/geojson/
 // L.geoJSON() also gives us handy options, almost like a built in `.forEach()`
 // // Define a function we want to run once for each feature in the features array
 // // Give each feature a popup describing the place and time of the earthquake
@@ -92,12 +126,12 @@ function pointToLayerFunc(feature, latlng) {
   }).addTo(myMap);
 
 //  Create legend
-  var legend= L.control({position:"bottomright"});
+//   var legend= L.control({position:"bottomright"});
 
-  legend.onAdd=function(){
-      var div = L.DomUtil.create("div", "info legend");
-      var grades=[0,1,2,3,4,5];
-      var colors =["#98ee00","#d4ee00","#eecc00","#ee9c00","#ea822c","#ea2c2c"]};
+//   legend.onAdd=function(){
+//       var div = L.DomUtil.create("div", "info legend");
+//       var grades=[0,1,2,3,4,5];
+//       var colors =["#98ee00","#d4ee00","#eecc00","#ee9c00","#ea822c","#ea2c2c"]};
 
 
 });
