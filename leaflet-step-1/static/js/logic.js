@@ -48,9 +48,7 @@ d3.json(queryUrl).then(function(data) {
 
   // Create our map, giving it the streetmap and earthquakes layers to display on load
   var myMap = L.map("mapid", {
-    center: [
-      37.09, -95.71
-    ],
+    center: [37.09, -95.71],
     zoom: 5,
     layers: [streetmap, earthquakes]
   });
@@ -58,10 +56,7 @@ d3.json(queryUrl).then(function(data) {
   // Create a layer control
   // Pass in our baseMaps and overlayMaps
   // Add the layer control to the map
-  L.control.layers(baseMaps, overlayMaps, {
-    collapsed: false
-  }).addTo(myMap);
-
+  L.control.layers(baseMaps, overlayMaps, {collapsed: false}).addTo(myMap);
 });
 
 // https://leafletjs.com/examples/geojson/
@@ -69,8 +64,7 @@ d3.json(queryUrl).then(function(data) {
 // // Define a function we want to run once for each feature in the features array
 // // Give each feature a popup describing the place and time of the earthquake
 function onEachFeatureFunc(feature, layer) {
-  layer.bindPopup("<h3>" + feature.properties.place +
-    "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
+    layer.bindPopup("Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place+"<br>Time:"+new Date(feature.properties.time));
 }
 
 var geojsonMarkerOptions = {
@@ -86,11 +80,11 @@ function pointToLayerFunc(feature, latlng) {
   return L.circleMarker(latlng, geojsonMarkerOptions);
 }
 
-
 // Create a GeoJSON layer containing the features array on the earthquakeData object
 // Run the onEachFeature function once for each piece of data in the array
   // Paste this into the .then() function
   var earthquakes = L.geoJSON(data.features, {
     onEachFeature: onEachFeatureFunc,
     pointToLayer: pointToLayerFunc
-  }).addTo(myMap);
+  })
+  earthquakes.addTo(myMap);
