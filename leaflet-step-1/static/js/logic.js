@@ -25,7 +25,7 @@ d3.json(queryUrl).then(function(data) {
     tileSize: 512,
     maxZoom: 18,
     zoomOffset: -1,
-    id: "mapbox/streets-v11",
+    id: "mapbox/outdoors-v11",
     accessToken: API_KEY
 });
 
@@ -34,7 +34,7 @@ d3.json(queryUrl).then(function(data) {
     tileSize: 512,
     maxZoom: 18,
     zoomOffset: -1,
-    id: "mapbox/streets-v11",
+    id: "mapbox/outdoors-v11",
     accessToken: API_KEY
 });
 
@@ -90,4 +90,15 @@ function pointToLayerFunc(feature, latlng) {
     onEachFeature: onEachFeatureFunc,
     pointToLayer: pointToLayerFunc
   }).addTo(myMap);
+
+//  Create legend
+  var legend= L.control({position:"bottomright"});
+
+  legend.onAdd=function(){
+      var div = L.DomUtil.create("div", "info legend");
+      var grades=[0,1,2,3,4,5];
+      var colors =["#98ee00","#d4ee00","#eecc00","#ee9c00","#ea822c","#ea2c2c"]};
+
+
 });
+
