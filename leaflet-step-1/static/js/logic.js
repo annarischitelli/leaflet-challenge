@@ -6,11 +6,31 @@ d3.json(queryUrl).then(function(data) {
   // The data.features object is in the GeoJSON standard
   console.log(data.features);
 
-  // This is it! Leaflet knows what to do with 
+
+// This is it! Leaflet knows what to do with 
   // each type of feature (held in the `geometry` key) and draws the correct markers.
-  var earthquakes = L.geoJSON(data.features);
+function createFeatures(earthquakeData) {
+    var earthquakes = L.geoJSON(earthquakeData, {
+        onEachFeature: function(feature, layer) {
+            layer.bindPopup("<h3>Magnitude: " + feature.properties.mag +"</h3><h3>Location: "+ feature.properties.place +
+                "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
+            },
+
+            pointToLayer: function (feature, latlng) {
+            return new L.circle(latlng,
+                {radius: getRadius(feature.properties.mag),
+                fillColor: getColor(feature.properties.mag),
+                fillOpacity: .5,
+                color: "black",
+                stroke: true,
+                weight: .8
+            })
+        }
+    });
+
 
   // The rest of this is all the same
+  function buildMap(earthquakes)
   var streetmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
     tileSize: 512,
