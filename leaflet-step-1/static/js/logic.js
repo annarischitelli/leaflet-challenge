@@ -60,29 +60,29 @@ d3.json(queryUrl).then(function(data) {
 // L.geoJSON() also gives us handy options, almost like a built in `.forEach()`
 // // Define a function we want to run once for each feature in the features array
 // // Give each feature a popup describing the place and time of the earthquake
-// function onEachFeatureFunc(feature, layer) {
-//   layer.bindPopup("<h3>" + feature.properties.place +
-//     "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
-// }
+function onEachFeatureFunc(feature, layer) {
+  layer.bindPopup("<h3>" + feature.properties.place +
+    "</h3><hr><p>" + new Date(feature.properties.time) + feature.properties.mag + "</p>");
+}
 
-// var geojsonMarkerOptions = {
-//   radius: 8,
-//   fillColor: "#ff7800",
-//   color: "#000",
-//   weight: 1,
-//   opacity: 1,
-//   fillOpacity: 0.8
-// };
+var geojsonMarkerOptions = {
+  radius: radius(feature.properties.mag),
+  fillColor: color(feature.properties.mag),
+  color: "red",
+  weight: 1,
+  opacity: 1,
+  fillOpacity: 1
+};
 
-// function pointToLayerFunc(feature, latlng) {
-//   return L.circleMarker(latlng, geojsonMarkerOptions);
-// }
+function pointToLayerFunc(feature, latlng) {
+  return L.circleMarker([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+}
 
 
 // Create a GeoJSON layer containing the features array on the earthquakeData object
 // Run the onEachFeature function once for each piece of data in the array
   // Paste this into the .then() function
-  // var earthquakes = L.geoJSON(data.features, {
-  //   onEachFeature: onEachFeatureFunc,
-  //   pointToLayer: pointToLayerFunc
-  // });
+  var earthquakes = L.geoJSON(data.features, {
+    onEachFeature: onEachFeatureFunc,
+    pointToLayer: pointToLayerFunc
+  });
